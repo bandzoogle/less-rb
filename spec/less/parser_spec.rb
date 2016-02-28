@@ -16,7 +16,7 @@ describe Less::Parser do
   end
 
   it "throws a ParseError if the lesscss is bogus" do
-    expect {subject.parse('{^)').to_css}.should raise_error(Less::ParseError)
+    -> {subject.parse('{^)').to_css}.should raise_error(Less::ParseError)
   end
 
   describe "when configured with multiple load paths" do
