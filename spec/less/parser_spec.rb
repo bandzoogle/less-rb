@@ -11,7 +11,7 @@ describe Less::Parser do
     end
 
     it "accepts options when assembling the parse tree" do
-      subject.parse(".class {width: 1+1}").to_css(:compress => true).strip.should eql ".class{width:2;}"
+      subject.parse(".class {width: 1px+1px;}", :compress => true).to_css.strip.should eql ".class{width:2px}"
     end
   end
 

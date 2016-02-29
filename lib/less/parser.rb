@@ -25,9 +25,12 @@ module Less
 
     # Convert `less` source into a abstract syntaxt tree
     # @param [String] less the source to parse
+    # @param [Hash] opts render options
     # @return [Less::Tree] the parsed tree
-    def parse(less)
-      Tree.new(less, @context, @options)
+    def parse(less, options = {})
+      Result.new @context.call('render', less, @options.merge(options))
+    rescue ExecJS::ProgramError => e
+      raise ParseError.new(e.message)
     end
 
     protected
@@ -36,18 +39,16 @@ module Less
       end
   end
 
-  # Abstract LessCSS syntax tree Less. Mainly used to emit CSS
-  class Tree
-    def initialize(less, context, options)
-      @less    = less
-      @context = context
-      @options = options
+  class Result
+    attr_reader :css, :imports
+
+    def initialize(result = {})
+      @css = result['css'] || ''
+      @imports = result['imports'] || []
     end
 
-    def to_css(options = {})
-      @result ||= @context.call("render", @less, @options.merge(options))
-    rescue ExecJS::ProgramError => e
-      raise ParseError.new(e.message)
+    def to_css
+      @css
     end
   end
 end
