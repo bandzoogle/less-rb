@@ -6,8 +6,8 @@ Gem::Specification.new do |s|
   s.name        = "less-rb"
   s.version     = Less::VERSION
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ["Alex MacCaw"]
-  s.email       = ["alexmaccaw@twitter.com"]
+  s.authors     = ["Alex MacCaw", "David Spurr"]
+  s.email       = ["alexmaccaw@twitter.com", "david.spurr@gmail.com"]
   s.homepage    = "http://lesscss.org"
   s.summary     = %q{Leaner CSS, in your browser or Ruby (via less.js)}
   s.description = %q{Invoke the Less CSS compiler from Ruby}
