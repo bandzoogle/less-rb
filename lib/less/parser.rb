@@ -1,6 +1,4 @@
 module Less
-  class ParseError < StandardError; end
-
   # Convert lesscss source into an abstract syntax Tree
   class Parser
     class << self

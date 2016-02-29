@@ -1,4 +1,5 @@
 require 'execjs'
+require 'less/errors'
 require 'less/parser'
 require 'less/version'
 require 'less/defaults'
