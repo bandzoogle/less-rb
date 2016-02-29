@@ -31,6 +31,7 @@ module Less
       opts = @options.merge(options)
       if opts[:custom_functions]
         ENV['NODE_PATH'] = "#{opts[:custom_functions].dirname}:#{old_node_env}"
+        opts[:custom_functions] = opts[:custom_functions].to_s.split('/').last
       end
       Result.new @context.call('render', less, opts)
     rescue ExecJS::ProgramError => e
