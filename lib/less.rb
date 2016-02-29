@@ -12,7 +12,7 @@ module Less
   end
 
   def self.bundled_path
-    File.expand_path('../less/js/lib', __FILE__)
+    File.expand_path('../less/js', __FILE__)
   end
 
   # Exports the `.node_modules` folder on the working directory so npm can
