@@ -16,6 +16,7 @@ module Less
     # @param [Hash] opts configuration options
     # @option opts [Array] :paths a list of directories to search when handling \@import statements
     # @option opts [String] :filename to associate with resulting parse trees (useful for generating errors)
+    # @option opts [Pathname] :custom_functions a file that defines any custom functions
     def initialize(options = {})
       @options = Less.defaults.merge(options)
       @context = self.class.backend.compile(compiler_source)
@@ -26,9 +27,16 @@ module Less
     # @param [Hash] opts render options
     # @return [Less::Tree] the parsed tree
     def parse(less, options = {})
-      Result.new @context.call('render', less, @options.merge(options))
+      old_node_env = ENV['NODE_PATH']
+      opts = @options.merge(options)
+      if opts[:custom_functions]
+        ENV['NODE_PATH'] = "#{opts[:custom_functions].dirname}:#{old_node_env}"
+      end
+      Result.new @context.call('render', less, opts)
     rescue ExecJS::ProgramError => e
       raise ParseError.new(e.message)
+    ensure
+      ENV['NODE_PATH'] = old_node_env
     end
 
     protected

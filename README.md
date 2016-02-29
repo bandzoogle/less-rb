@@ -27,7 +27,7 @@ For more information, visit <http://lesscss.org>.
 
 ## Usage
 
-less-rb exposes the `less.Parser` constructor to ruby code via `Less::Parser`. You can instate it
+less-rb exposes the `less.render` constructor to ruby code via `Less::Parser`. You can instate it
 context free:
 
     parser = Less::Parser.new
@@ -36,15 +36,19 @@ or with configuration options:
 
     parser = Less::Parser.new :paths => ['./lib', 'other/lib'], :filename => 'mystyles.less'
 
-Once you have a parser instantiated, you can parse code to get your AST !
+Once you have a parser instantiated, you can parse code to get your CSS
 
-    tree = parser.parse(".class {width: 1+1}") # => Less::Tree
-    tree.to_css #=> .class {\n  width: 2;\n}\n
-    tree.to_css(:compress => true) #=> .class{width:2;}
+    result = parser.parse(".class {width: 1+1}") # => Less::Result
+    result.to_css #=> .class {\n  width: 2;\n}\n
+    parser.parse(".class {width: 1+1}", :compress => true).to_css #=> .class{width:2;}
 
 There's a shortcut for this whole routine:
 
     Less::Parser.compile(css, options)
+
+### Custom functions
+
+You can load in custom functions for less by supplying the `:custom_functions` option with a path to a JS file. Your JS file must export a function with the signature of `registerCustomFunctions(less, functionRegistry)` which you can then use to add the custom functions to the less compiler using `functionRegistry.add[Multiple]`.
 
 ## Credits
 
