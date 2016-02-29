@@ -78,18 +78,16 @@ describe Less::Parser do
 
   end
 
-  it "throws a ParseError if the lesscss is bogus" do
+  it "throws a ParseError if the less has errors" do
     -> {subject.parse('{^)').to_css}.should raise_error(Less::ParseError, /Unrecognised input/)
   end
 
   describe "when configured with multiple load paths" do
-    before {
-      @parser = Less::Parser.new(:paths => [cwd.join('one').to_s, cwd.join('two').to_s])
-    }
+    let(:parser) { Less::Parser.new(:paths => [cwd.join('one').to_s, cwd.join('two').to_s]) }
 
     it "will load files from both paths" do
-      @parser.parse('@import "one.less";').to_css.gsub(/\n/,'').strip.should eql ".one {  width: 1;}"
-      @parser.parse('@import "two.less";').to_css.gsub(/\n/,'').strip.should eql ".two {  width: 1;}"
+      parser.parse('@import "one.less";').to_css.gsub(/\n/,'').strip.should eql ".one {  width: 1;}"
+      parser.parse('@import "two.less";').to_css.gsub(/\n/,'').strip.should eql ".two {  width: 1;}"
     end
   end
 
@@ -97,15 +95,15 @@ describe Less::Parser do
     before do
       Less.paths << cwd.join('one').to_s
       Less.paths << cwd.join('two').to_s
-      @parser = Less::Parser.new
-    end
-    after do
-      Less.paths.clear
     end
 
+    after { Less.paths.clear }
+
+    let(:parser) { Less::Parser.new }
+
     it "will load files from default load paths" do
-      @parser.parse('@import "one.less";').to_css.gsub(/\n/,'').strip.should eql ".one {  width: 1;}"
-      @parser.parse('@import "two.less";').to_css.gsub(/\n/,'').strip.should eql ".two {  width: 1;}"
+      parser.parse('@import "one.less";').to_css.gsub(/\n/,'').strip.should eql ".one {  width: 1;}"
+      parser.parse('@import "two.less";').to_css.gsub(/\n/,'').strip.should eql ".two {  width: 1;}"
     end
   end
 
