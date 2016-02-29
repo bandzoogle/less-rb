@@ -46,16 +46,30 @@ describe Less::Parser do
   end
 
   describe "loading in custom functions" do
-    subject { Less::Parser.new paths: [ support.join('custom_functions') ], custom_functions: support.join('custom_functions/custom_functions') }
-    let(:result) { subject.parse('@import "custom_functions.less";').to_css.gsub(/\n/,'').strip }
+    context 'defined as parser option' do
+      subject { Less::Parser.new paths: [ support.join('custom_functions') ], custom_functions: support.join('custom_functions/custom_functions') }
+      let(:result) { subject.parse('@import "custom_functions.less";').to_css.gsub(/\n/,'').strip }
 
-    it 'should import the custom functions defined' do
-      result.should eql ".one {  width: 20;}"
+      it 'should import the custom functions defined' do
+        result.should eql ".one {  width: 20;}"
+      end
+
+      it 'should not permenantly modify the node path' do
+        result
+        ENV['NODE_PATH'].split(':').grep(support.join('custom_functions')).should be_empty
+      end
     end
 
-    it 'should not permenantly modify the node path' do
-      result
-      ENV['NODE_PATH'].split(':').grep(support.join('custom_functions')).should be_empty
+    context 'when specified as a global option' do
+      before { Less.defaults[:custom_functions] = support.join('custom_functions/custom_functions') }
+      after  { Less.defaults[:custom_functions] = nil }
+
+      subject { Less::Parser.new paths: [ support.join('custom_functions') ] }
+      let(:result) { subject.parse('@import "custom_functions.less";').to_css.gsub(/\n/,'').strip }
+
+      it 'should import the custom functions defined' do
+        result.should eql ".one {  width: 20;}"
+      end
     end
   end
 
