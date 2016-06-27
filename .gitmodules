@@ -3,7 +3,7 @@
 	url = https://github.com/cloudhead/less.js.git
 [submodule "lib/less/js/node-mime"]
 	path = lib/less/js/node-mime
-	url = git@github.com:broofa/node-mime.git
+	url = https://github.com/broofa/node-mime.git
 [submodule "lib/less/js/image-size"]
 	path = lib/less/js/image-size
-	url = git@github.com:image-size/image-size.git
+	url = https://github.com/image-size/image-size.git
